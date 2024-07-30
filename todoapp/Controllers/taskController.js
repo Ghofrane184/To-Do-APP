@@ -20,7 +20,7 @@ exports.createTask = async (req, res) => {
 
 exports.getAllTasks = async (req, res) => {
   try {
-    // Récupérer toutes les tâches sauf celles dont le projectId est null
+  
     const tasks = await Task.findAll({
       where: {
         projectId: {
@@ -54,13 +54,13 @@ exports.updateTask = async (req, res) => {
     const { id } = req.params;
     const { projectId, title, description, status, due_date } = req.body;
 
-    // Find the task by ID
+  
     const task = await Task.findByPk(id);
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
 
-    // Prepare updated data, keeping projectId unchanged if it's null in the task
+   
     const updatedData = {
       title: title !== undefined ? title : task.title,
       description: description !== undefined ? description : task.description,
@@ -68,12 +68,11 @@ exports.updateTask = async (req, res) => {
       due_date: due_date !== undefined ? due_date : task.due_date
     };
 
-    // Only update projectId if it is provided and the existing projectId is not null
     if (projectId !== undefined) {
       if (task.projectId !== null) {
         updatedData.projectId = projectId;
       } else {
-        // If the existing projectId is null, do not update it
+        
         updatedData.projectId = task.projectId;
       }
     }
